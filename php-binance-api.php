@@ -829,15 +829,15 @@ class API {
       curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
       curl_setopt( $ch, CURLOPT_TIMEOUT, 60 );
       $output = curl_exec( $ch );
+
       // Check if any error occurred
       if( curl_errno( $ch ) > 0 ) {
-         echo 'Curl error: ' . curl_error( $ch ) . "\n";
-         return [];
+         throw new \Exception( 'Curl error: ' . curl_error( $ch ) );
       }
       curl_close( $ch );
       $json = json_decode( $output, true );
       if( isset( $json[ 'msg' ] ) ) {
-         echo "signedRequest error: {$output}" . PHP_EOL;
+         throw new \Exception( "signedRequest error: {$output}" );
       }
       $this->transfered += strlen( $output );
       $this->requestCount++;
